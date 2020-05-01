@@ -21,8 +21,8 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach($this->users as $user): ?>
-            <tr id="<?php echo $user->id; ?>">
+        <?php foreach($this->users as $key=>$user): ?>
+            <tr>
                 <td><?php echo $user->first_name; ?></td>
                 <td><?php echo $user->last_name; ?></td>
                 <td><?php echo $user->email; ?></td>
@@ -33,8 +33,8 @@
                     <?php  endforeach;?>
                 </td>
                 <td>
-                    <a href="/edit?id=<?php echo $user->id; ?>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                    <a href="#deleteUserModal" class="delete delete-user" data-toggle="modal" data-id="<?php echo $user->id; ?>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                    <a href="/edit?index=<?php echo $key; ?>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                    <a href="#deleteUserModal" class="delete delete-user" data-toggle="modal" data-index="<?php echo $key; ?>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                 </td>
             </tr>
         <?php  endforeach;?>

@@ -2,31 +2,28 @@
 
 namespace Models;
 
-use Controllers\helpers;
-
 class User
 {
-    private static function get_users() {
+    public static function get_users() {
         return json_decode(file_get_contents('data.json'))->users;
-    }
-    private static function get_countries() {
-        $countries = [];
-        foreach(json_decode(file_get_contents('data.json'))->countries as $country) {
-            $countries[$country->id] = $country;
-        }
-        return $countries;
     }
 
     public static function get_users_with_countries() {
         $users = self::get_users();
-        $countries = self::get_countries();
+        $countries = Country::get_countries_by_key();
         foreach ($users as $user) {
             $user->country = $countries[$user->country_id];
         }
         return $users;
     }
 
-    public static function all() {
-        return self::get_data()->users;
+    public static function get_user_by_index($index) {
+        return self::get_users()[$index];
+    }
+
+    public static function insert($data) {
+        $json_data = json_decode(file_get_contents('data.json'));
+        $json_data->users[] = $data;
+        return file_put_contents('data.json', json_encode($json_data)) ? true : false;
     }
 }

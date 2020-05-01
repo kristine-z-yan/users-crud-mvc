@@ -2,13 +2,14 @@
 
 namespace Controllers;
 
+use Models\Country;
 use system\Controller;
 use Models\User;
 
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the user.
      *
      */
     public function index()
@@ -19,30 +20,40 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * Show the form for creating a new user.
      */
     public function create()
     {
+        $countries = Country::get_countries();
+        $this->view->countries = $countries;
         $this->view->render("create");
-//        $countries = Country::all();
-//        $roles = Role::all();
-//        return view('store', compact(['countries', 'roles']));
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * Store a newly created user in json.
      */
-    public function store(StoreUser $request)
+    public function store()
     {
-//        $data = $request->all();
-//        $user = User::create($data);
-//        $user->roles()->attach($data['roles']);
-//        return redirect(route('index'));
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['email'];
+        $country_id = (int) $_POST['country_id'];
+        $roles = $_POST['roles'];
+        $data = [
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'email' => $email,
+            'country_id' => $country_id,
+            'roles' => $roles,
+        ];
+        $created = User::insert($data);
+//        if($created) {
+//            $message = "<label class='text-success'>User Created Successfully</p>";
+//        } else {
+//            $message = "<label class='text-error'>Something went wrong</p>";
+//        }
+//        $this->view->message = $message;
+        $this->view->render("create");
     }
 
     /**
@@ -51,8 +62,15 @@ class UserController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
+        $countries = Country::get_countries();
+        if ($_GET['index']) {
+            $user = User::get_user_by_index($_GET['index']);
+            $this->view->user = $user;
+            $this->view->countries = $countries;
+            $this->view->render("edit");
+        }
 //        $user = User::find($id);
 //        $countries = Country::all();
 //        $roles = Role::all();

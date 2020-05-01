@@ -2,6 +2,24 @@ $.ajaxSetup({
     headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
 });
 $(document).ready(function() {
+
+    var maxRoles      = 5; //maximum input boxes allowed
+    var wrapper   		= $(".input-fields-wrap"); //Fields wrapper
+    var addButton      = $(".add-field-button"); //Add button ID
+
+    var x = 1; //initlal text box count
+    $(addButton).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < maxRoles){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append('<input type="text" class="form-control roles" name="roles[]"/><a href="#" class="remove-field">Remove</a>'); //add input box
+        }
+    });
+
+    $(wrapper).on("click",".remove-field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    });
+
     // Set inputs value from storage
     $('.form-single').each((index, item) => {
         if (sessionStorage.getItem($(item).attr('name'))) {
@@ -24,7 +42,7 @@ $(document).ready(function() {
         var lastName = $('#last-name').val();
         var email = $('#email').val();
         var countryId = $('#country').val();
-        var roles = $('#roles').val();
+        var roles = $('.roles').val();
         return {
             'first_name': firstName,
             'last_name': lastName,
@@ -40,8 +58,8 @@ $(document).ready(function() {
         sessionStorage.clear();
 
         // For ajax
-        // var data = getUserFormData();
-        // console.log(data);
+        var data = getUserFormData();
+        console.log(data);
         // $.ajax({
         //     url: '/',
         //     method: 'post',
@@ -69,21 +87,21 @@ $(document).ready(function() {
         // })
     });
 
-    let deletedUserId;
+    let deletedUserIndex;
 
     $('.delete-user').click(function(){
-        deletedUserId = $(this).attr('data-id');
+        deletedUserIndex = $(this).attr('data-index');
     })
 
     // Edit User
     $("#delete-user").click(function () {
         $.ajax({
-            url: '/' + deletedUserId,
+            url: '/' + deletedUserIndex,
             method: 'delete',
             success: function (res) {
                 alert('User deleted successfully');
                 $('#deleteUserModal').modal('hide');
-                $('#user-'+deletedUserId).remove();
+                $('#user-'+deletedUserIndex).remove();
             }
         })
     });
