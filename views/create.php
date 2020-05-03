@@ -13,33 +13,33 @@
         <label for="first-name">First Name</label>
         <input type="text" id="first-name" class="form-control form-single" name="first_name" placeholder="First Name" value="<?php echo $_SESSION['values']['first_name'] ?>">
         <?php if($_SESSION['errors']['first_name']):?>
-        <span class="text-danger">
-            <strong><?php echo $_SESSION['errors']['first_name']?></strong>
-            <?php unset($_SESSION['errors']['first_name'])?>
-        </span>
+            <span class="text-danger">
+                <strong><?php echo $_SESSION['errors']['first_name']?></strong>
+                <?php unset($_SESSION['errors']['first_name'])?>
+            </span>
         <?php endif; ?>
     </div>
-    <div class="form-group <?php if(isset($_SESSION['errors']['last_name'])) echo ' has-error' ?>">
+    <div class="form-group<?php if(isset($_SESSION['errors']['last_name'])) echo ' has-error' ?>">
         <label for="last-name">Last Name</label>
         <input type="text" id="last-name" class="form-control form-single" name="last_name" placeholder="Last Name" value="<?php echo $_SESSION['values']['last_name'] ?>">
         <?php if($_SESSION['errors']['last_name']):?>
             <span class="text-danger">
-            <strong><?php echo $_SESSION['errors']['last_name']?></strong>
-            <?php unset($_SESSION['errors']['last_name'])?>
-        </span>
+                <strong><?php echo $_SESSION['errors']['last_name']?></strong>
+                <?php unset($_SESSION['errors']['last_name'])?>
+            </span>
         <?php endif; ?>
     </div>
-    <div class="form-group <?php if(isset($_SESSION['errors']['email'])) echo ' has-error' ?>">
+    <div class="form-group<?php if(isset($_SESSION['errors']['email'])) echo ' has-error' ?>">
         <label for="email">Email address</label>
         <input type="email" class="form-control form-single" id="email" name="email" placeholder="name@example.com" value="<?php echo $_SESSION['values']['email'] ?>">
         <?php if($_SESSION['errors']['email']):?>
             <span class="text-danger">
-            <strong><?php echo $_SESSION['errors']['email']?></strong>
-            <?php unset($_SESSION['errors']['email'])?>
-        </span>
+                <strong><?php echo $_SESSION['errors']['email']?></strong>
+                <?php unset($_SESSION['errors']['email'])?>
+            </span>
         <?php endif; ?>
     </div>
-    <div class="form-group <?php if(isset($_SESSION['errors']['country_id'])) echo ' has-error' ?>">
+    <div class="form-group<?php if(isset($_SESSION['errors']['country_id'])) echo ' has-error' ?>">
         <label for="country">Country</label>
         <select class="form-control form-single" id="country" name="country_id">
             <option value="0" disabled selected>Select Country</option>
@@ -49,12 +49,12 @@
         </select>
         <?php if($_SESSION['errors']['country_id']):?>
             <span class="text-danger">
-            <strong><?php echo $_SESSION['errors']['country_id']?></strong>
-            <?php unset($_SESSION['errors']['country_id'])?>
-        </span>
+                <strong><?php echo $_SESSION['errors']['country_id']?></strong>
+                <?php unset($_SESSION['errors']['country_id'])?>
+            </span>
         <?php endif; ?>
     </div>
-    <div class="form-group input-fields-wrap <?php if(isset($_SESSION['errors']['roles'])) echo ' has-error' ?>">
+    <div class="form-group input-fields-wrap<?php if(isset($_SESSION['errors']['roles'])) echo ' has-error' ?>">
         <label for="roles">Roles</label>
         <button class="btn btn-info add-field-button">Add More Roles</button>
         <div class="form-control-static">

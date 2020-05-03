@@ -79,16 +79,21 @@ class UserController extends Controller
      */
     public function update()
     {
-        $data = $this->get_post_data();
         $index = $_POST['index'];
         if (isset($index)) {
-            $updated = User::update($index, $data);
-//            if($updated) {
-//            $message = "<label class='text-success'>User Created Successfully</p>";
-                //        } else {
-                //            $message = "<label class='text-error'>Something went wrong</p>";
-                //        }
-                //        $this->view->message = $message;
+            $data = $this->validate_post_data();
+            if (empty($data['errors'])) {
+                $updated = User::update($index, $data['data']);
+                if($updated) {
+                    $message = "<h3 class='text-success'>User Updated Successfully</h3>";
+                } else {
+                    $message = "<h3 class='text-error'>Something went wrong</h3>";
+                }
+                $_SESSION['message'] =$message;
+                unset($_SESSION['values']);
+            } else {
+                $_SESSION['errors'] = $data['errors'];
+            }
             header("Location: /edit?index=".$index);
         }
     }
