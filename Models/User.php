@@ -35,7 +35,7 @@ class User
 
     public static function delete($index) {
         $json_data = json_decode(file_get_contents('data.json'));
-        unset($json_data->users[$index]);
+        array_splice($json_data->users, $index, 1);
         return file_put_contents('data.json', json_encode($json_data)) ? true : false;
     }
 }

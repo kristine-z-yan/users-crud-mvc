@@ -12,7 +12,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < maxRoles){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<div><input type="text" class="form-control roles" name="roles[]"/><a href="#" class="remove-field">Remove role</a></div>'); //add input box
+            $(wrapper).append('<div class="form-control-static"><input type="text" class="form-control roles" name="roles[]"/><a href="#" class="remove-field">Remove role</a></div>'); //add input box
         }
     });
 
@@ -53,8 +53,8 @@ $(document).ready(function() {
         sessionStorage.clear();
 
         // For ajax
-        var data = getUserFormData();
-        console.log(data);
+        // var data = getUserFormData();
+        // console.log(data);
         // $.ajax({
         //     url: '/',
         //     method: 'post',
@@ -104,11 +104,11 @@ $(document).ready(function() {
         })
     });
 
-    $('.form-control').on('change keyup', function() {
-        sessionStorage.setItem($(this).attr('name'), $(this).val());
-        if ($(this.parentElement).hasClass('has-error')) {
-            $(this.parentElement).removeClass('has-error');
-            $('.help-block',this.parentElement).remove();
-        }
-    })
+    // $('.form-control').on('change keyup', function() {
+    //     sessionStorage.setItem($(this).attr('name'), $(this).val());
+    //     if ($(this.parentElement).hasClass('has-error')) {
+    //         $(this.parentElement).removeClass('has-error');
+    //         $('.help-block',this.parentElement).remove();
+    //     }
+    // })
 })

@@ -22,6 +22,7 @@ class UserController extends Controller
         $pages = ceil($total_items / $limit);
         $current_users = array_splice($users, $offset, $limit);
 
+        $this->view->offset = $offset;
         $this->view->pages = $pages;
         $this->view->current_users = $current_users;
         $this->view->render("index");
@@ -42,15 +43,21 @@ class UserController extends Controller
      */
     public function store()
     {
-        $data = $this->get_post_data();
-        $created = User::insert($data);
-//        if($created) {
-//            $message = "<label class='text-success'>User Created Successfully</p>";
-//        } else {
-//            $message = "<label class='text-error'>Something went wrong</p>";
-//        }
-//        $this->view->message = $message;
-        $this->view->render("create");
+        $data = $this->validate_post_data();
+        if (empty($data['errors'])) {
+            $created = User::insert($data['data']);
+            if($created) {
+                $message = "<h3 class='text-success'>User Created Successfully</h3>";
+            } else {
+                $message = "<h3 class='text-error'>Something went wrong</h3>";
+            }
+            $_SESSION['message'] =$message;
+            unset($_SESSION['values']);
+        } else {
+            $_SESSION['errors'] = $data['errors'];
+            $_SESSION['values'] = $data['data'];
+        }
+        header("Location: /create");
     }
 
     /**
@@ -97,13 +104,49 @@ class UserController extends Controller
         }
     }
 
-    private function get_post_data() {
-        return [
-            'first_name' => $_POST['first_name'],
-            'last_name' => $_POST['last_name'],
-            'email' => $_POST['email'],
-            'country_id' => (int) $_POST['country_id'],
-            'roles' => $_POST['roles'],
+    private function validate_post_data() {
+        $first_name = $last_name = $email = $country_id = "";
+        $roles = $data['errors'] = array();
+
+        if (empty($_POST["first_name"])) {
+            $data['errors']['first_name'] = "The first name is required";
+        }
+        else {
+            $first_name = $_POST["first_name"];
+        }
+        if (empty($_POST["last_name"])) {
+            $data['errors']['last_name'] = "The last name is required";
+        }
+        else {
+            $last_name = $_POST["last_name"];
+        }
+        if (empty($_POST["email"])) {
+            $data['errors']['email'] = "The email is required";
+        }
+        else {
+            $email = $_POST["email"];
+        }
+        if (!isset($_POST["country_id"]) || $_POST["country_id"] == 0) {
+            $data['errors']['country_id'] = "The country is required";
+        }
+        else {
+            $country_id = (int) $_POST["country_id"];
+        }
+        if ($_POST["roles"][0] == "") {
+            $data['errors']['roles'] = "There must be at least one role";
+        }
+        else {
+            $roles = $_POST["roles"];
+        }
+
+        $data['data'] = [
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'email' => $email,
+            'country_id' => $country_id,
+            'roles' => $roles,
         ];
+
+        return $data;
     }
 }
