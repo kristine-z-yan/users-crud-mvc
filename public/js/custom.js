@@ -3,21 +3,28 @@ $.ajaxSetup({
 });
 $(document).ready(function() {
 
-    var maxRoles      = 5; //maximum input boxes allowed
-    var wrapper   		= $(".input-fields-wrap"); //Fields wrapper
-    var addButton      = $(".add-field-button"); //Add button ID
+    var maxRoles = 5; //maximum input boxes allowed
+    var wrapper = $(".input-fields-wrap"); //Fields wrapper
+    var addButton = $(".add-field-button"); //Add button ID
 
-    var x = 1; //initlal text box count
-    $(addButton).click(function(e){ //on add input button click
+    var x = 1;
+    var roleId = 1;
+    $(addButton).click(function(e){
         e.preventDefault();
-        if(x < maxRoles){ //max input box allowed
-            x++; //text box increment
-            $(wrapper).append('<div class="form-control-static"><input type="text" class="form-control roles" name="roles[]"/><a href="#" class="remove-field">Remove role</a></div>'); //add input box
+        if(x < maxRoles){
+            x++;
+            roleId++;
+            $(wrapper).append('<div class="form-control-static"><input type="text" class="form-control roles form-multiple" name="roles[]" data-id="role_'+ roleId +'"/><a href="#" class="remove-field" data-id="role_'+ roleId +'">Remove role</a></div>');
         }
     });
 
-    $(wrapper).on("click",".remove-field", function(e){ //user click on remove text
+    $(wrapper).on("click",".remove-field", function(e) {
         e.preventDefault(); $(this).parent('div').remove(); x--;
+        var roles = JSON.parse(sessionStorage.getItem('roles'));
+        var roleId = $(this).attr('data-id');
+        if(roles[roleId]) delete roles[roleId];
+        sessionStorage.setItem( 'roles', JSON.stringify(roles))
+
     });
 
     // Set inputs value from storage
@@ -28,14 +35,21 @@ $(document).ready(function() {
     });
 
     // Set roles value from storage
-    if (sessionStorage.getItem('roles[]')) {
-        if (!$('.form-multiple').val()) {
-            $.each(sessionStorage.getItem('roles[]').split(","), function(i,e){
-                $(".form-multiple option[value='" + e + "']").prop("selected", true);
-            });
-        }
+    let roles = JSON.parse(sessionStorage.getItem('roles'));
+    if (roles) {
+        $.each(roles, function (id, role) {
+            if (role) {
+                if(x < maxRoles){
+                    if (x == 1) {
+                        $('.form-multiple[data-id="role_1"]').val(role);
+                    } else {
+                        $(wrapper).append('<div class="form-control-static"><input type="text" class="form-control roles form-multiple" name="roles[]" data-id="role_'+ id +'" value="'+ role +'"/><a href="#" class="remove-field" data-id="role_'+ id +'">Remove role</a></div>');
+                    }
+                    x++;
+                }
+            }
+        })
     }
-
 
     function getUserFormData() {
         return {
@@ -104,11 +118,25 @@ $(document).ready(function() {
         })
     });
 
-    // $('.form-control').on('change keyup', function() {
-    //     sessionStorage.setItem($(this).attr('name'), $(this).val());
-    //     if ($(this.parentElement).hasClass('has-error')) {
-    //         $(this.parentElement).removeClass('has-error');
-    //         $('.help-block',this.parentElement).remove();
-    //     }
-    // })
+    function hideError() {
+        if ($(this.parentElement).hasClass('has-error')) {
+            $(this.parentElement).removeClass('has-error');
+            $('.text-danger',this.parentElement).remove();
+        }
+    }
+
+    $('.form-single').on('change keyup', function() {
+        sessionStorage.setItem($(this).attr('name'),$(this).val());
+        hideError();
+    })
+    $(document).on('change keyup','.form-multiple', function () {
+        if ($(this).attr('name') == 'roles[]') {
+            var roles = JSON.parse(sessionStorage.getItem('roles') || '{}');
+            var newRole = $(this).val();
+            var roleId = $(this).attr('data-id');
+            roles[roleId] = newRole;
+            sessionStorage.setItem( 'roles', JSON.stringify(roles))
+        }
+        hideError();
+    })
 })

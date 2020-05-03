@@ -13,6 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        if ($_SESSION['values']) unset($_SESSION['values']);
         $users = User::get_users_with_countries();
 
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -57,7 +58,7 @@ class UserController extends Controller
             $_SESSION['errors'] = $data['errors'];
             $_SESSION['values'] = $data['data'];
         }
-        header("Location: /create");
+        $this->view->render("create");
     }
 
     /**
@@ -141,7 +142,7 @@ class UserController extends Controller
             $data['errors']['roles'] = "There must be at least one role";
         }
         else {
-            $roles = $_POST["roles"];
+            $roles = array_unique($_POST["roles"]);
         }
 
         $data['data'] = [

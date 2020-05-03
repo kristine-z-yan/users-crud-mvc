@@ -4,7 +4,6 @@
 <div>
     <?php if($_SESSION['message']):?>
         <div class="alert">
-            <?php echo $_SESSION['message']?>
             <?php unset($_SESSION['message']);?>
         </div>
     <?php endif;?>
@@ -58,12 +57,12 @@
         <label for="roles">Roles</label>
         <button class="btn btn-info add-field-button">Add More Roles</button>
         <div class="form-control-static">
-            <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $_SESSION['values']['roles'][0]?>">
+            <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $_SESSION['values']['roles'][0]?>" data-id="role_1">
         </div>
         <?php if($_SESSION['values']['roles']):?>
             <?php for($i=1; $i < count($_SESSION['values']['roles']); $i++):?>
                 <div class="form-control-static">
-                    <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $_SESSION['values']['roles'][$i]?>">
+                    <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $_SESSION['values']['roles'][$i]?>" data-id="<?php echo 'role_'.($i+1)?>">
                     <a href="#" class="remove-field">Remove role</a>
                 </div>
             <?php endfor;?>
