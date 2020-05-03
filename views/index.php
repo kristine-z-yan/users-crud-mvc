@@ -21,7 +21,7 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach($this->users as $key=>$user): ?>
+        <?php foreach($this->current_users as $key=>$user): ?>
             <tr id="user-<?php echo $key; ?>">
                 <td><?php echo $user->first_name; ?></td>
                 <td><?php echo $user->last_name; ?></td>
@@ -42,8 +42,11 @@
     </table>
 
     <div class="clearfix">
-<!--            {{$users->links()}}-->
-    </div>
+        <?php for($x = 1; $x <= $this->pages; $x++): ?>
+            <div>
+                <a href='/?page=<?php echo $x; ?>' class="btn btn-default pagination-link <?php if((!isset($_GET['page']) && $x == 1) || $_GET['page'] == $x) echo 'active'?>"><?php echo $x; ?></a>
+            </div>
+        <?php endfor; ?>    </div>
 </div>
 
 <!-- Delete User Modal HTML -->

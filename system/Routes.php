@@ -12,7 +12,7 @@ class Routes {
                     $array = array_slice($path, 2);
                     call_user_func_array([$ctrl_obj, $method[0]], $array);
                 } else {
-                    echo "method not found";
+                    $ctrl_obj->index();
                 }
             } else {
                 $ctrl_obj->index();

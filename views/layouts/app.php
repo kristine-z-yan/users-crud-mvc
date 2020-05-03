@@ -15,7 +15,7 @@
                 background: #f5f5f5;
                 font-family: 'Varela Round', sans-serif;
                 font-size: 13px;
-                margin-top: 80px;
+                margin-top: 30px;
             }
             .table-wrapper {
                 background: #fff;
@@ -200,6 +200,10 @@
 
             form {
                 margin-top: 50px;
+            }
+
+            .pagination-link {
+                margin: 10px;
             }
         </style>
     </head>

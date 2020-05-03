@@ -10,12 +10,20 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the user.
-     *
      */
     public function index()
     {
         $users = User::get_users_with_countries();
-        $this->view->users = $users;
+
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        $total_items = count($users); // total items
+        $pages = ceil($total_items / $limit);
+        $current_users = array_splice($users, $offset, $limit);
+
+        $this->view->pages = $pages;
+        $this->view->current_users = $current_users;
         $this->view->render("index");
     }
 
