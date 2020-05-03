@@ -1,6 +1,7 @@
 <a href="/" class="btn btn-info">< Go Back</a>
 <h2>Edit User</h2>
 <form action="/update" method="post">
+    <input type="hidden" name="index" value="<?php echo $_GET['index'] ?>">
     <div class="form-group">
         <label for="first-name">First Name</label>
         <input type="text" id="first-name" class="form-control form-single" name="first_name" placeholder="First Name" value="<?php echo $this->user->first_name ?>">
@@ -33,7 +34,7 @@
         <select class="form-control form-single" id="country" name="country_id">
             <option value="0" disabled selected>Select Country</option>
             <?php foreach($this->countries as $country): ?>
-                <option value="<?php echo $country->id ?>" selected="<?php if($this->user->country_id == $country->id) 'selected'?>"><?php echo $country->name ?></option>
+                <option value="<?php echo $country->id ?>" <?php if($this->user->country_id == $country->id) echo 'selected'?>><?php echo $country->name ?></option>
             <?php endforeach; ?>
         </select>
 <!--            @if ($errors->has('country_id'))-->
@@ -46,7 +47,10 @@
         <label for="roles">Roles</label>
         <button class="add-field-button">Add More Roles</button>
         <?php foreach($this->user->roles as $role) :?>
-            <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $role?>">
+            <div>
+                <input type="text" class="form-control roles form-multiple" name="roles[]" value="<?php echo $role?>">
+                <a href="#" class="remove-field">Remove role</a>
+            </div>
         <?php endforeach;?>
     </div>
     <div class="form-group text-right">

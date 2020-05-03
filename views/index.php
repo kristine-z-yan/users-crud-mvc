@@ -22,14 +22,14 @@
         </thead>
         <tbody>
         <?php foreach($this->users as $key=>$user): ?>
-            <tr>
+            <tr id="user-<?php echo $key; ?>">
                 <td><?php echo $user->first_name; ?></td>
                 <td><?php echo $user->last_name; ?></td>
                 <td><?php echo $user->email; ?></td>
                 <td><?php echo $user->country->name; ?></td>
                 <td>
                     <?php foreach($user->roles as $role): ?>
-                        <?php echo $role->name; ?> </br>
+                        <?php echo $role; ?> </br>
                     <?php  endforeach;?>
                 </td>
                 <td>

@@ -26,4 +26,16 @@ class User
         $json_data->users[] = $data;
         return file_put_contents('data.json', json_encode($json_data)) ? true : false;
     }
+
+    public static function update($index, $data) {
+        $json_data = json_decode(file_get_contents('data.json'));
+        $json_data->users[$index] = $data;
+        return file_put_contents('data.json', json_encode($json_data)) ? true : false;
+    }
+
+    public static function delete($index) {
+        $json_data = json_decode(file_get_contents('data.json'));
+        unset($json_data->users[$index]);
+        return file_put_contents('data.json', json_encode($json_data)) ? true : false;
+    }
 }

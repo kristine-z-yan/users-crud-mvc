@@ -34,18 +34,7 @@ class UserController extends Controller
      */
     public function store()
     {
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $email = $_POST['email'];
-        $country_id = (int) $_POST['country_id'];
-        $roles = $_POST['roles'];
-        $data = [
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'email' => $email,
-            'country_id' => $country_id,
-            'roles' => $roles,
-        ];
+        $data = $this->get_post_data();
         $created = User::insert($data);
 //        if($created) {
 //            $message = "<label class='text-success'>User Created Successfully</p>";
@@ -57,60 +46,56 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the specified user.
      */
     public function edit()
     {
         $countries = Country::get_countries();
-        if ($_GET['index']) {
+        if (isset($_GET['index'])) {
             $user = User::get_user_by_index($_GET['index']);
             $this->view->user = $user;
             $this->view->countries = $countries;
             $this->view->render("edit");
         }
-//        $user = User::find($id);
-//        $countries = Country::all();
-//        $roles = Role::all();
-//        foreach($user->roles as $role)
-//        {
-//            $user_roles[] = $role->id;
-//        }
-//        return view('edit', compact(['user','countries', 'roles', 'user_roles']));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * Update the specified user.
      */
-    public function update(UpdateUser $request, $id)
+    public function update()
     {
-//        $data = $request->all();
-//        $user = user::find($id);
-//        if (!empty($data)) {
-//            $user->roles()->sync($data['roles']);
-//            $user->update($data);
-//            return redirect(route('index'));
-//        }
+        $data = $this->get_post_data();
+        $index = $_POST['index'];
+        if (isset($index)) {
+            $updated = User::update($index, $data);
+//            if($updated) {
+//            $message = "<label class='text-success'>User Created Successfully</p>";
+                //        } else {
+                //            $message = "<label class='text-error'>Something went wrong</p>";
+                //        }
+                //        $this->view->message = $message;
+            header("Location: /edit?index=".$index);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * Remove the specified user.
      */
-    public function destroy($id)
+    public function delete()
     {
-//        $user = User::find($id);
-//        if ($user){
-//            $user->delete();
-//            return response('deleted', 200);
-//        };
+        if ($_POST['index']) {
+            User::delete($_POST['index']);
+            echo 'deleted';
+        }
+    }
+
+    private function get_post_data() {
+        return [
+            'first_name' => $_POST['first_name'],
+            'last_name' => $_POST['last_name'],
+            'email' => $_POST['email'],
+            'country_id' => (int) $_POST['country_id'],
+            'roles' => $_POST['roles'],
+        ];
     }
 }
